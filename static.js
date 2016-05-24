@@ -1,24 +1,26 @@
+var fs = require('fs');
+var path = require('path');
 module.exports = function(request, response){
-  response.writeHead(200, {'Content-type': 'text/html'});
-  console.log('Request', request.url);
-  var fs = require('fs');
-  if(request.url === '/'){
-    fs.readFile('views/index.html', 'utf8', function (errors, contents){
-      response.write(contents);
-      response.end();
-    });
-  } else if(request.url === '/dojo'){
-    fs.readFile('views/dojo.html', 'utf8', function (errors, contents){
-      response.write(contents);
-      response.end();
-    });
-  } else if(request.url === '/stylesheet/style.css'){
-    fs.readFile('stylesheet/style.css', 'utf8', function (errors, contents){
+  //response.writeHead(200, {'Content-type': 'text/html'});
+
+  //console.log(fs);
+  console.log(path);
+  if(fs.exists) {
+  if(request.url === '/' ){
+    fs.readFile('./views/index.html', 'utf8', function (errors, contents){
       response.write(contents);
       response.end();
     });
   } else {
-      response.end('File not found!!!');
+    fs.readFile('.'+ path.dirname(request.url)+'/'+path.basename(request.url), function (errors, contents){
+      response.write(contents);
+      response.end();
+    });
   }
+}
+
+   else {
+      response.end('File not found!!!');
+   }
 
 }
